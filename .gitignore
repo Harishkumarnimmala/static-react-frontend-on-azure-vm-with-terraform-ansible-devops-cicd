@@ -1,0 +1,23 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+
+# Ansible
+*.retry
+*.log
+
+# Node/React
+react-app/node_modules/
+react-app/build/
+
+# Secrets
+*.pem
+*.key
+*.pub
+
+# OS/system files
+.DS_Store
+Thumbs.db
