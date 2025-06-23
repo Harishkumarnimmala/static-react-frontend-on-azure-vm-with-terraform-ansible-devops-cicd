@@ -1,0 +1,37 @@
+- name: Deploy React app to Azure VM
+  hosts: react-vm
+  become: true
+  tasks:
+
+    - name: Install Node.js and npm (LTS version via NodeSource)
+      become: yes
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+        apt-get install -y nodejs
+      args:
+        executable: /bin/bash
+
+    - name: Install serve globally
+      npm:
+        name: serve
+        global: yes
+
+    - name: Create app directory
+      file:
+        path: /opt/react-app
+        state: directory
+        owner: azureuser
+        group: azureuser
+        mode: '0755'
+
+    - name: Copy React build to VM
+      copy:
+        src: ../react-app/build/
+        dest: /opt/react-app/
+        owner: azureuser
+        group: azureuser
+
+    - name: Start serve as background process
+      shell: nohup serve -s /opt/react-app -l 3000 &
+      args:
+        chdir: /opt/react-app

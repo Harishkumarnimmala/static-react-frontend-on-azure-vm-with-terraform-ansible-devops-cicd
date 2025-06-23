@@ -1,0 +1,29 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildDir: 'react-app/build'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      cd react-app
+      npm install
+      npm run build
+    displayName: 'Install and Build React App'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(buildDir)'
+      ArtifactName: 'react-app-build'
+      publishLocation: 'Container'
+    displayName: 'Publish React Build Artifact'
